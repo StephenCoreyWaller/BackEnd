@@ -3,25 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using BackEnd.Data;
 using BackEnd.DTOs.UserDTOs;
 using BackEnd.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 //Implementation of the User services 
 namespace BackEnd.Services.UserService
 {
     public class UserService : IUserService
     {
-        public List<User> UserList = new List<User>{
-            new User { UserName = "stephen", Id = 1},
-            new User { UserName = "Corey", Id = 2},
-            new User { UserName = "Jason", Id = 3},
-            new User { UserName = "Mom", Id = 4},
-            new User { UserName = "brian", Id = 5}
-        };
         private readonly IMapper _mapper;
-        public UserService(IMapper mapper)
+        private readonly DataContext _context;
+        public UserService(IMapper mapper, DataContext context)
         {
+            _context = context;
             _mapper = mapper;
         }
         /*
@@ -32,7 +29,7 @@ namespace BackEnd.Services.UserService
         public async Task<ServiceResponse<GetUserDTO>> GetUserService(int id)
         {
             var response = new ServiceResponse<GetUserDTO>();
-            response.Data = _mapper.Map<GetUserDTO>(UserList.FirstOrDefault(u => u.Id == id));
+            response.Data = _mapper.Map<GetUserDTO>(await _context.Users.FirstOrDefaultAsync(u => u.Id == id));
 
             if (response.Data == null)
             {
@@ -50,12 +47,14 @@ namespace BackEnd.Services.UserService
         {
             var response = new ServiceResponse<GetUserDTO>();
 
-            try{
-                //Get the return after implimenting the database 
-                UserList.Add(_mapper.Map<User>(newUser));
-
-            }catch(Exception ex){
-
+            try
+            {
+                var user = await _context.Users.AddAsync(_mapper.Map<User>(newUser));
+                await _context.SaveChangesAsync(); 
+                response.Data = _mapper.Map<GetUserDTO>(user.Entity); 
+            }
+            catch (Exception ex)
+            {
                 response.Success = false;
                 response.Message = ex.Message;
             }
