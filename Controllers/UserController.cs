@@ -1,7 +1,7 @@
-using System.Collections.Generic;
-using System.Linq;
-using BackEnd.Models;
+using System.Threading.Tasks;
+using BackEnd.Services.UserService;
 using Microsoft.AspNetCore.Mvc;
+using BackEnd.DTOs.UserDTOs;
 
 //MVC controller for CRUD opperations for the USER entitiy
 namespace BackEnd.Controllers
@@ -10,25 +10,43 @@ namespace BackEnd.Controllers
     [Route("[controller]")]
     public class UserController : ControllerBase
     {
-        public List<User> UserTestList = new List<User>{
-            new User { Name = "stephen", Id = 1}, 
-            new User { Name = "Corey", Id = 2}, 
-            new User { Name = "Jason", Id = 3}, 
-            new User { Name = "Mom", Id = 4}, 
-            new User { Name = "brian", Id = 5}
-        }; 
-
-        //Returns the User calls DTO 
+        private readonly IUserService _userService;
+        
+        public UserController(IUserService userService)
+        {
+            _userService = userService;
+        }
+        /*
+            Get: Returns the User calls DTO
+            Parameters: User Id
+            Return: User information GetUserDTO
+        */
         [HttpGet("{id}")]
-        public IActionResult GetUser(int id){
+        public async Task<IActionResult> GetUser(int id)
+        {
+            var user = await _userService.GetUserService(id);
 
-            var user = UserTestList.FirstOrDefault(u => u.Id == id); 
-
-            if(user != null){
-                
-                return Ok(user); 
+            if (user != null)
+            {
+                return Ok(user);
             }
-            return NotFound(); 
+            return NotFound(user);
+        }
+        /*
+            Post: Creates new user for the database
+            Parameters: Name, Hash, Is a reqruiter 
+            Return: User GetUserDTO
+        */
+        [HttpPost]
+        public async Task<IActionResult> CreateUser(AddUserDTO newUser)
+        {
+            var userCreated = await _userService.CreateUserService(newUser);
+
+            if (userCreated.Success == true)
+            {
+                return Ok(userCreated);
+            }
+            return BadRequest(userCreated);
         }
     }
 }
