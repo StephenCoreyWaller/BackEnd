@@ -1,5 +1,6 @@
 using AutoMapper;
 using BackEnd.Data;
+using BackEnd.Models;
 using BackEnd.Services.UserService;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

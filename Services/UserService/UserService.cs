@@ -1,12 +1,9 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using BackEnd.Data;
 using BackEnd.DTOs.UserDTOs;
 using BackEnd.Models;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 //Implementation of the User services 
@@ -59,6 +56,55 @@ namespace BackEnd.Services.UserService
                 response.Message = ex.Message;
             }
             return response;
+        }
+        /*
+            Delete: Deletes a user from the database
+            Parameters: User Id
+            Returne: bool of success
+        */
+        public async Task<ServiceResponse<bool>> DeleteUserService(int id)
+        {
+            var response = new ServiceResponse<bool>(); 
+            
+            try{
+
+                var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id); 
+                _context.Users.Remove(user);
+                await _context.SaveChangesAsync();  
+
+            }catch(Exception ex){
+
+                response.Success = false; 
+                response.Message = ex.Message; 
+            }
+            return response; 
+        }
+        /*
+            Put: Updates a users information 
+            Parameters: Id of user 
+            Return: Updated user entity 
+        */
+        public async Task<ServiceResponse<GetUserDTO>> UpdateUserService(int id, AddUserDTO updateUser){
+
+            var response = new ServiceResponse<GetUserDTO>();
+
+            try{
+                var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id); 
+                user.AboutMe = updateUser.AboutMe ?? user.AboutMe;
+                user.Email = updateUser.Email ?? user.AboutMe; 
+                user.FirstName = updateUser.FirstName ?? user.FirstName; 
+                user.LastName = updateUser.LastName ?? user.LastName; 
+                user.UserName = updateUser.UserName ?? user.UserName; 
+                //add password and recruiter change 
+                await _context.SaveChangesAsync();  
+                response.Data = _mapper.Map<GetUserDTO>(user); 
+            
+            }catch(Exception ex){
+
+                response.Success = false; 
+                response.Message = ex.Message; 
+            }
+            return response; 
         }
     }
 }
