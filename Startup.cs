@@ -27,6 +27,7 @@ namespace BackEnd
             services.AddDbContext<DataContext>(opt => 
                 opt.UseSqlServer(Configuration.GetConnectionString("DbConnectionString"))); 
             services.AddScoped<IUserService, UserService>(); 
+            services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddControllers();
             services.AddAutoMapper(typeof(Startup)); 
         }

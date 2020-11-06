@@ -91,11 +91,12 @@ namespace BackEnd.Services.UserService
             try{
                 var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id); 
                 user.AboutMe = updateUser.AboutMe ?? user.AboutMe;
-                user.Email = updateUser.Email ?? user.AboutMe; 
+                user.Email = updateUser.Email ?? user.Email; 
                 user.FirstName = updateUser.FirstName ?? user.FirstName; 
                 user.LastName = updateUser.LastName ?? user.LastName; 
                 user.UserName = updateUser.UserName ?? user.UserName; 
                 //add password and recruiter change 
+                
                 await _context.SaveChangesAsync();  
                 response.Data = _mapper.Map<GetUserDTO>(user); 
             

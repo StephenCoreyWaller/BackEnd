@@ -11,6 +11,7 @@ namespace BackEnd
         {
             CreateMap<User, GetUserDTO>();
             CreateMap<AddUserDTO, User>(); 
+            CreateMap<RegisterDTO, User>(); 
         }
     }
 }
