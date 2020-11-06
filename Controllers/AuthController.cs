@@ -36,9 +36,13 @@ namespace BackEnd.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> LoginUser(LoginUserDTO user){
 
-            
+            var response = await _repo.LoginUser(user); 
 
-            return Ok(); 
+            if(response.Success){
+
+                return Ok(response);
+            }
+            return NotFound(response);
         }
     }
 }

@@ -88,36 +88,41 @@ namespace BackEnd.Data
         public async Task<ServiceResponse<string>> LoginUser(LoginUserDTO userRequest)
         {
             var response = new ServiceResponse<string>(); 
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.UserName.ToLower() == userRequest.UserName.ToLower());
 
-            //check for user first return if no user found with user name or password is wrong 
+            //Add Token in this path
+            if(!await UserExists(userRequest.UserName)){
 
-            var user = await _context.Users.FirstOrDefaultAsync(x => x.UserName.ToLower() == userRequest.UserName.ToLower()); 
-
-
-
+                response.Success = false; 
+                response.Message = "User is not found or password is incorrect."; 
+                return response; 
+            }
+            
             return response; 
         }
         /*
             Action: Creates byte array of user hash and salt
-            Param: User 
+            Param: User, user password requesting login
             Return: Byte array
         */
-        // private byte[] GetUserPasswordHash(User user){
+        private bool GetUserPasswordHash(User user, string password){
 
-        //     using(var hmac = new System.Security.Cryptography.HMACSHA512()){
+            byte[] computedHash; 
 
-        //         var arr = hmac.
-        //     }
-        //     return 
-        // }
+            using(var hmac = new System.Security.Cryptography.HMACSHA512(user.Salt)){
+
+                computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+            }
+            return CheckPassword(user.Hash, computedHash); 
+        }
         /* 
             Action: Checks that password is correct for user login 
             Param: User from database and password submited from post request 
             return: bool 
         */
-        private bool CheckPassword(byte[] passwordHash, byte[] password){
+        private bool CheckPassword(byte[] passwordHash, byte[] passwordForLogin){
 
-            return passwordHash.SequenceEqual(password); 
+            return passwordHash.SequenceEqual(passwordForLogin); 
         }    
     }
 }
