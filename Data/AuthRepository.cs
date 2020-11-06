@@ -91,13 +91,12 @@ namespace BackEnd.Data
             var user = await _context.Users.FirstOrDefaultAsync(x => x.UserName.ToLower() == userRequest.UserName.ToLower());
 
             //Add Token in this path
-            if(!await UserExists(userRequest.UserName)){
+            if(!await UserExists(userRequest.UserName) || !GetUserPasswordHash(user, userRequest.Password)){
 
                 response.Success = false; 
                 response.Message = "User is not found or password is incorrect."; 
                 return response; 
             }
-            
             return response; 
         }
         /*
