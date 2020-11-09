@@ -1,4 +1,5 @@
 using AutoMapper;
+using BackEnd.DTOs.ThreadDTOs;
 using BackEnd.DTOs.UserDTOs;
 using BackEnd.Models;
 
@@ -12,6 +13,8 @@ namespace BackEnd
             CreateMap<User, GetUserDTO>();
             CreateMap<AddUserDTO, User>(); 
             CreateMap<RegisterDTO, User>(); 
+            CreateMap<Thread, CreateThreadDTO>(); 
+            CreateMap<Thread, GetThreadDTO>();
         }
     }
 }
