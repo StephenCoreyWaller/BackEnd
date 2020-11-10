@@ -1,4 +1,6 @@
-using System; 
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using BackEnd.Data;
@@ -44,6 +46,18 @@ namespace BackEnd.Services.ThreadServices
                 response.Message = ex.Message;
                 response.Success = false; 
             }
+            return response; 
+        }
+        public async Task<ServiceResponse<List<GetThreadDTO>>> GetAllTheThreads(string category){
+
+            ServiceResponse<List<GetThreadDTO>> response = new ServiceResponse<List<GetThreadDTO>>(); 
+            List<GetThreadDTO> threads = _mapper.Map<List<GetThreadDTO>>(await _context.Threads.Where(t => t.Category == category).ToListAsync());
+            response.Data = threads; 
+
+            if(threads.Count == 0){
+
+                response.Message = "0 reuslts returned."; 
+            } 
             return response; 
         }
         public Task<ServiceResponse<bool>> DeleteThread(int id)

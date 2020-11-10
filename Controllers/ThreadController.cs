@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 /*
@@ -23,6 +24,11 @@ namespace BackEnd.Controllers
         {
            _threadService = threadService;
         }
+        /*
+            Action: Controller for creating thread 
+            Param: Body of http request create thread dto
+            return: action result 
+        */
         [HttpPost]
         public async Task<IActionResult> CreateThread(CreateThreadDTO threadDTO)
         {
@@ -34,11 +40,22 @@ namespace BackEnd.Controllers
                 response.Success = false; 
                 return BadRequest(response); 
             }
-
             response = await _threadService.CreateThread(
                 threadDTO, int.Parse(User.Claims.FirstOrDefault(u => u.Type == ClaimTypes.NameIdentifier).Value));
 
             return Ok(response);
+        }
+        /*
+            Action: Returns all threads in a category 
+            Param: category id
+            return: all threads in action result 
+            development note: create a category entity to seperate threads 
+        */
+        [AllowAnonymous]
+        [HttpGet("{category}")]
+        public async Task<IActionResult> GetAllThreads(string category){ 
+        
+            return Ok(await _threadService.GetAllTheThreads(category));
         }
     }
 }
