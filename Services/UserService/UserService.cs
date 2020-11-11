@@ -98,8 +98,6 @@ namespace BackEnd.Services.UserService
                 user.FirstName = updateUser.FirstName ?? user.FirstName; 
                 user.LastName = updateUser.LastName ?? user.LastName; 
                 user.UserName = updateUser.UserName ?? user.UserName; 
-                //add password and recruiter change 
-                
                 await _context.SaveChangesAsync();  
                 response.Data = _mapper.Map<GetUserDTO>(user); 
             

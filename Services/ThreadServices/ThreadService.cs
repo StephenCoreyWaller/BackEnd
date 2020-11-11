@@ -117,10 +117,30 @@ namespace BackEnd.Services.ThreadServices
             }
             return repsonse; 
         }
-
-        public Task<ServiceResponse<GetThreadDTO>> UpdateThread(UpdateThreadDTO update)
+        /*
+            Action: Updates the title and category
+            Param: updateDTO and user ID 
+            Return: Service response with getthreadDTO data 
+        */
+        public async Task<ServiceResponse<GetThreadDTO>> UpdateThread(UpdateThreadDTO update, int userId)
         {
-            throw new System.NotImplementedException();
+            ServiceResponse<GetThreadDTO> response = new ServiceResponse<GetThreadDTO>(); 
+
+            try{
+
+                Thread thread = await _context.Threads.FirstOrDefaultAsync(t => t.Id == update.Id && t.User.Id == userId);
+                thread.Category = update.Category ?? thread.Category; 
+                thread.Title = update.Title ?? thread.Title; 
+                await _context.SaveChangesAsync();
+                response.Data = _mapper.Map<GetThreadDTO>(thread); 
+
+            }catch(Exception ex){
+
+                response.Success = false; 
+                response.Message = ex.Message; 
+                response.ResultStatusCode = StatusCode.serverError; 
+            }
+            return response; 
         }
     }
 }

@@ -10,7 +10,7 @@ namespace BackEnd.Services.ThreadServices
     {
         Task<ServiceResponse<GetThreadDTO>> CreateThread(CreateThreadDTO threadDTO, int id);
         Task<ServiceResponse<List<GetThreadDTO>>> GetThreadsOfUser(int id);
-        Task<ServiceResponse<GetThreadDTO>> UpdateThread(UpdateThreadDTO update); 
+        Task<ServiceResponse<GetThreadDTO>> UpdateThread(UpdateThreadDTO update, int userId); 
         Task<ServiceResponse<bool>> DeleteThread(int threadId, int userId);
         Task<ServiceResponse<List<GetThreadDTO>>> GetAllTheThreads(string category); 
     } 
