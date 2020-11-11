@@ -34,11 +34,7 @@ namespace BackEnd.Controllers
 
             var user = await _userService.GetUserService(id);
 
-            if (user != null)
-            {
-                return Ok(user);
-            }
-            return NotFound(user);
+            return user.ReturnStatus();
         } 
         /*
             Delete: Deletes a user from the database
@@ -51,11 +47,7 @@ namespace BackEnd.Controllers
             var id = int.Parse(User.Claims.FirstOrDefault(u => u.Type == ClaimTypes.NameIdentifier).Value);
             var deletedUser = await _userService.DeleteUserService(id);
 
-            if (deletedUser.Success)
-            {
-                return Ok(deletedUser);
-            }
-            return BadRequest(deletedUser);
+            return deletedUser.ReturnStatus();
         }
         /*
             Put: Updates a users information 
@@ -68,11 +60,7 @@ namespace BackEnd.Controllers
             var id = int.Parse(User.Claims.FirstOrDefault(u => u.Type == ClaimTypes.NameIdentifier).Value);
             var updatUser = await _userService.UpdateUserService(id, userUpdate);
 
-            if(updatUser.Success){
-
-                return Ok(updatUser); 
-            }
-            return BadRequest(updatUser);
+            return updatUser.ReturnStatus();
         }
     }
 }

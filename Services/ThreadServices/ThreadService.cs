@@ -30,6 +30,13 @@ namespace BackEnd.Services.ThreadServices
         {
             ServiceResponse<GetThreadDTO> response = new ServiceResponse<GetThreadDTO>();
 
+            if(threadDTO.Title == null && threadDTO.Category == null){
+
+                response.Message = "Category and title are requiered"; 
+                response.Success = false; 
+                response.ResultStatusCode = StatusCode.BadRequest;
+                return response;  
+            }
             try{
                 Thread thread = new Thread {
                     Title = threadDTO.Title, 
@@ -38,13 +45,14 @@ namespace BackEnd.Services.ThreadServices
                     User = await _context.Users.FirstOrDefaultAsync(u => u.Id == id) 
                 };
                 response.Data = _mapper.Map<GetThreadDTO>((await _context.Threads.AddAsync(thread)).Entity);
-                response.Data.UserName = (await _context.Users.FirstOrDefaultAsync(u => u.Id == id)).UserName; 
+                response.Data.UserName = (await _context.Users.FirstOrDefaultAsync(u => u.Id == id)).UserName;  
                 await _context.SaveChangesAsync();
-
+                
             }catch (Exception ex){
 
                 response.Message = ex.Message;
                 response.Success = false; 
+                response.ResultStatusCode = StatusCode.serverError;   
             }
             return response; 
         }
@@ -84,13 +92,30 @@ namespace BackEnd.Services.ThreadServices
                 response.Data = false; 
                 response.Message = ex.Message; 
                 response.Success = false; 
+                response.ResultStatusCode = StatusCode.serverError; 
             }
             return response;  
         }
-
-        public Task<ServiceResponse<GetThreadDTO>> GetThread(int id)
+        /*
+            Action: Gets all threads by a specific user
+            Params: User Id 
+            Return: List of thread DTOs of all of the user has posted 
+        */
+        public async Task<ServiceResponse<List<GetThreadDTO>>> GetThreadsOfUser(int id)
         {
-            throw new System.NotImplementedException();
+            ServiceResponse<List<GetThreadDTO>> repsonse = new ServiceResponse<List<GetThreadDTO>>(); 
+
+            try{
+
+                repsonse.Data = _mapper.Map<List<GetThreadDTO>>(await  _context.Threads.Where(t => t.User.Id == id).ToListAsync()); 
+
+            }catch(Exception ex){
+
+                repsonse.Message = ex.Message; 
+                repsonse.Success = false;
+                repsonse.ResultStatusCode = StatusCode.serverError;  
+            }
+            return repsonse; 
         }
 
         public Task<ServiceResponse<GetThreadDTO>> UpdateThread(UpdateThreadDTO update)

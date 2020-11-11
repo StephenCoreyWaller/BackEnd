@@ -32,6 +32,7 @@ namespace BackEnd.Services.UserService
             {
                 response.Success = false;
                 response.Message = "No User Found";
+                response.ResultStatusCode = StatusCode.NotFound; 
             }
             return response;
         }
@@ -54,6 +55,7 @@ namespace BackEnd.Services.UserService
             {
                 response.Success = false;
                 response.Message = ex.Message;
+                response.ResultStatusCode = StatusCode.serverError; 
             }
             return response;
         }
@@ -76,6 +78,7 @@ namespace BackEnd.Services.UserService
 
                 response.Success = false; 
                 response.Message = ex.Message; 
+                response.ResultStatusCode = StatusCode.serverError; 
             }
             return response; 
         }
@@ -104,6 +107,7 @@ namespace BackEnd.Services.UserService
 
                 response.Success = false; 
                 response.Message = ex.Message; 
+                response.ResultStatusCode = StatusCode.serverError; 
             }
             return response; 
         }

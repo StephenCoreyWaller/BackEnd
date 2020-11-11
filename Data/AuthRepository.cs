@@ -12,7 +12,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 
 
-//Implimintation of IAuthrepository
+//Implimintation of IAuthrepository1
 namespace BackEnd.Data
 {
     public class AuthRepository : IAuthRepository
@@ -37,6 +37,7 @@ namespace BackEnd.Data
 
                 response.Success = false;
                 response.Message = "User name or email is already taken.";
+                response.ResultStatusCode = StatusCode.UnprocessableEntity;
                 return response;
             }
 
@@ -106,6 +107,7 @@ namespace BackEnd.Data
 
                 response.Success = false;
                 response.Message = "User is not found or password is incorrect.";
+                response.ResultStatusCode = StatusCode.NotFound;
                 return response;
             }
             response.Data = CreateJWT(user);

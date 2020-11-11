@@ -31,19 +31,11 @@ namespace BackEnd.Controllers
         */
         [HttpPost]
         public async Task<IActionResult> CreateThread(CreateThreadDTO threadDTO)
-        {
-            ServiceResponse<GetThreadDTO> response = new ServiceResponse<GetThreadDTO>(); 
-
-            if(threadDTO.Title == null && threadDTO.Category == null){
-
-                response.Message = "Category and title are requiered"; 
-                response.Success = false; 
-                return BadRequest(response); 
-            }
-            response = await _threadService.CreateThread(
+        {   
+            ServiceResponse<GetThreadDTO> response = await _threadService.CreateThread(
                 threadDTO, int.Parse(User.Claims.FirstOrDefault(u => u.Type == ClaimTypes.NameIdentifier).Value));
 
-            return Ok(response);
+            return response.ReturnStatus();
         }
         /*
             Action: Returns all threads in a category 
@@ -55,7 +47,9 @@ namespace BackEnd.Controllers
         [HttpGet("{category}")]
         public async Task<IActionResult> GetAllThreads(string category){ 
         
-            return Ok(await _threadService.GetAllTheThreads(category));
+            ServiceResponse<List<GetThreadDTO>> response = await _threadService.GetAllTheThreads(category); 
+
+            return response.ReturnStatus();
         }
         [HttpDelete]
         public async Task<IActionResult> DeleteThread(ThredIdDTO thread){
@@ -63,11 +57,18 @@ namespace BackEnd.Controllers
             ServiceResponse<bool> response = await _threadService.DeleteThread(
                 thread.Id, int.Parse(User.Claims.FirstOrDefault(u => u.Type == ClaimTypes.NameIdentifier).Value)); 
 
-            if(response.Success == false){
+            return response.ReturnStatus();
+        }
+        [HttpGet]
+        public async Task<IActionResult> GetUserThreads(){
 
-                return BadRequest(response);
-            }  
-            return Ok(response);
+            ServiceResponse<List<GetThreadDTO>> response = await _threadService.GetThreadsOfUser(GetIdentifier()); 
+
+            return response.ReturnStatus();  
+        }
+        private int GetIdentifier(){
+
+            return int.Parse(User.Claims.FirstOrDefault(u => u.Type == ClaimTypes.NameIdentifier).Value); 
         }
     }
 }

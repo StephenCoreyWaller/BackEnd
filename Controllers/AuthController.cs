@@ -26,23 +26,15 @@ namespace BackEnd.Controllers
         public async Task<IActionResult> RegisterUser(RegisterDTO user){
 
             var response = await _repo.RegisterUser(_mapper.Map<User>(user), user.Password);
-
-            if(response.Success){
-
-                return Ok(response);
-            } 
-            return UnprocessableEntity(response);
+ 
+            return response.ReturnStatus();
         }
         [HttpPost("login")]
         public async Task<IActionResult> LoginUser(LoginUserDTO user){
 
             var response = await _repo.LoginUser(user); 
 
-            if(response.Success){
-
-                return Ok(response);
-            }
-            return NotFound(response);
+            return response.ReturnStatus();
         }
     }
 }
