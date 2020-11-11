@@ -11,7 +11,7 @@ namespace BackEnd.Services.ThreadServices
         Task<ServiceResponse<GetThreadDTO>> CreateThread(CreateThreadDTO threadDTO, int id);
         Task<ServiceResponse<GetThreadDTO>> GetThread(int id);
         Task<ServiceResponse<GetThreadDTO>> UpdateThread(UpdateThreadDTO update); 
-        Task<ServiceResponse<bool>> DeleteThread(int id);
+        Task<ServiceResponse<bool>> DeleteThread(int threadId, int userId);
         Task<ServiceResponse<List<GetThreadDTO>>> GetAllTheThreads(string category); 
     } 
 }

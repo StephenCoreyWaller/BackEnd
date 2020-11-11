@@ -57,5 +57,17 @@ namespace BackEnd.Controllers
         
             return Ok(await _threadService.GetAllTheThreads(category));
         }
+        [HttpDelete]
+        public async Task<IActionResult> DeleteThread(ThredIdDTO thread){
+
+            ServiceResponse<bool> response = await _threadService.DeleteThread(
+                thread.Id, int.Parse(User.Claims.FirstOrDefault(u => u.Type == ClaimTypes.NameIdentifier).Value)); 
+
+            if(response.Success == false){
+
+                return BadRequest(response);
+            }  
+            return Ok(response);
+        }
     }
 }

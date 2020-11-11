@@ -48,6 +48,11 @@ namespace BackEnd.Services.ThreadServices
             }
             return response; 
         }
+        /* 
+            Action: Gets all threads for a specific category
+            Param: string of the category name 
+            Return: List of threads with the same categroy
+        */
         public async Task<ServiceResponse<List<GetThreadDTO>>> GetAllTheThreads(string category){
 
             ServiceResponse<List<GetThreadDTO>> response = new ServiceResponse<List<GetThreadDTO>>(); 
@@ -60,9 +65,27 @@ namespace BackEnd.Services.ThreadServices
             } 
             return response; 
         }
-        public Task<ServiceResponse<bool>> DeleteThread(int id)
+        /*
+            Action: Deletes a thread from the database
+            Params: thread Id and User Id 
+            Return: true if removed from the database
+        */
+        public async Task<ServiceResponse<bool>> DeleteThread(int threadid, int userId)
         {
-            throw new System.NotImplementedException();
+            ServiceResponse<bool> response = new ServiceResponse<bool>();   
+
+            try{
+
+                response.Data = null != _context.Threads.Remove(await _context.Threads.FirstOrDefaultAsync(t => t.Id == threadid && t.User.Id == userId)); 
+                await _context.SaveChangesAsync();
+
+            }catch(Exception ex){
+
+                response.Data = false; 
+                response.Message = ex.Message; 
+                response.Success = false; 
+            }
+            return response;  
         }
 
         public Task<ServiceResponse<GetThreadDTO>> GetThread(int id)
