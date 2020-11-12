@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BackEnd.Controllers
 {
     [Authorize]
-    public static class ControllerBaseExtension 
+    public static class ClaimsExtensions 
     {
         /*
             Action: returns the id from the claim of user 

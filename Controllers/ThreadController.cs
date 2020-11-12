@@ -33,7 +33,7 @@ namespace BackEnd.Controllers
         public async Task<IActionResult> CreateThread(CreateThreadDTO threadDTO)
         {   
             ServiceResponse<GetThreadDTO> response = await _threadService.CreateThread(
-                threadDTO, GetIdentifier());
+                threadDTO, User.GetIdentifier());
             return response.ReturnStatus();
         }
         /*
@@ -59,7 +59,7 @@ namespace BackEnd.Controllers
         public async Task<IActionResult> DeleteThread(ThredIdDTO thread){
 
             ServiceResponse<bool> response = await _threadService.DeleteThread(
-                thread.Id, GetIdentifier()); 
+                thread.Id, User.GetIdentifier()); 
             return response.ReturnStatus();
         }
         /*
@@ -70,7 +70,7 @@ namespace BackEnd.Controllers
         [HttpGet]
         public async Task<IActionResult> GetUserThreads(){
 
-            ServiceResponse<List<GetThreadDTO>> response = await _threadService.GetThreadsOfUser(GetIdentifier()); 
+            ServiceResponse<List<GetThreadDTO>> response = await _threadService.GetThreadsOfUser(User.GetIdentifier()); 
             return response.ReturnStatus();  
         } 
         /*
@@ -81,17 +81,8 @@ namespace BackEnd.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdateThread(UpdateThreadDTO update){
 
-            ServiceResponse<GetThreadDTO> response = await _threadService.UpdateThread(update, GetIdentifier());
+            ServiceResponse<GetThreadDTO> response = await _threadService.UpdateThread(update, User.GetIdentifier());
             return response.ReturnStatus(); 
         }
-        /*
-            Action: Helper function to get the user authorization from claim
-            Param: void
-            Return: user int ID
-        */
-        private int GetIdentifier(){
-
-            return int.Parse(User.Claims.FirstOrDefault(u => u.Type == ClaimTypes.NameIdentifier).Value); 
-        } 
     }
 }

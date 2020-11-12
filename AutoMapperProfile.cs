@@ -1,4 +1,5 @@
 using AutoMapper;
+using BackEnd.DTOs.PostDTOs;
 using BackEnd.DTOs.ThreadDTOs;
 using BackEnd.DTOs.UserDTOs;
 using BackEnd.Models;
@@ -15,6 +16,10 @@ namespace BackEnd
             CreateMap<RegisterDTO, User>(); 
             CreateMap<Thread, CreateThreadDTO>(); 
             CreateMap<Thread, GetThreadDTO>();
+            CreateMap<Posts, GetPostDTO>().ForMember(PostDto => 
+                PostDto.User, Post => 
+                    Post.MapFrom(p => p.User.UserName)
+            );
         }
     }
 }

@@ -34,9 +34,5 @@ namespace BackEnd.Controllers
             ServiceResponse<GetPostDTO> response = await _postService.CreatePost(create, User.GetIdentifier());
             return response.ReturnStatus();
         }
-        private int GetIdentifier()
-        {
-            return int.Parse(User.Claims.FirstOrDefault(u => u.Type == ClaimTypes.NameIdentifier).Value);
-        }
     }
 }

@@ -30,8 +30,7 @@ namespace BackEnd.Controllers
         [HttpGet]
         public async Task<IActionResult> GetUser()
         {
-            var id = int.Parse(User.Claims.FirstOrDefault(u => u.Type == ClaimTypes.NameIdentifier).Value);
-
+            var id = User.GetIdentifier();
             var user = await _userService.GetUserService(id);
 
             return user.ReturnStatus();
@@ -44,7 +43,7 @@ namespace BackEnd.Controllers
         [HttpDelete]
         public async Task<IActionResult> DeleteUser()
         {
-            var id = int.Parse(User.Claims.FirstOrDefault(u => u.Type == ClaimTypes.NameIdentifier).Value);
+            var id = User.GetIdentifier();
             var deletedUser = await _userService.DeleteUserService(id);
 
             return deletedUser.ReturnStatus();
@@ -57,7 +56,7 @@ namespace BackEnd.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdateUser(AddUserDTO userUpdate){
 
-            var id = int.Parse(User.Claims.FirstOrDefault(u => u.Type == ClaimTypes.NameIdentifier).Value);
+            var id = User.GetIdentifier();
             var updatUser = await _userService.UpdateUserService(id, userUpdate);
 
             return updatUser.ReturnStatus();
