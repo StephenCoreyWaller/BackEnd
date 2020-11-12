@@ -1,7 +1,7 @@
 using System.Text;
 using AutoMapper;
 using BackEnd.Data;
-using BackEnd.Models;
+using BackEnd.Services.PostServices;
 using BackEnd.Services.ThreadServices;
 using BackEnd.Services.UserService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -31,6 +31,7 @@ namespace BackEnd
                 opt.UseSqlServer(Configuration.GetConnectionString("DbConnectionString"))); 
             services.AddScoped<IUserService, UserService>(); 
             services.AddScoped<IThreadService, ThreadService>();
+            services.AddScoped<IPostService, PostService>();
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddControllers();
             services.AddAutoMapper(typeof(Startup)); 

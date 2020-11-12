@@ -84,6 +84,11 @@ namespace BackEnd.Controllers
             ServiceResponse<GetThreadDTO> response = await _threadService.UpdateThread(update, GetIdentifier());
             return response.ReturnStatus(); 
         }
+        /*
+            Action: Helper function to get the user authorization from claim
+            Param: void
+            Return: user int ID
+        */
         private int GetIdentifier(){
 
             return int.Parse(User.Claims.FirstOrDefault(u => u.Type == ClaimTypes.NameIdentifier).Value); 
