@@ -1,3 +1,4 @@
+using System.Reflection;
 using System.Runtime.ConstrainedExecution;
 using System;
 using System.Collections.Generic;
@@ -92,6 +93,11 @@ namespace BackEnd.Services.PostServices
             }
             return response; 
         }
+        /*
+            Action: Updates the comment of a Post
+            Param: post id, comment to update, and user Id
+            Return: PostDTO
+        */
         public async Task<ServiceResponse<GetPostDTO>> UpdatePost(UpdatePostDTO updatePost, int id)
         {
             ServiceResponse<GetPostDTO> response = new ServiceResponse<GetPostDTO>(); 
@@ -102,7 +108,7 @@ namespace BackEnd.Services.PostServices
                 post.Comment = updatePost.Comment ?? post.Comment; 
                 await _context.SaveChangesAsync(); 
                 response.Data = _mapper.Map<GetPostDTO>(post);
-                
+
             }catch(Exception ex){
 
                 response.Message = ex.Message; 

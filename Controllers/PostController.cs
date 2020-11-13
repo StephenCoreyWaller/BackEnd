@@ -59,6 +59,11 @@ namespace BackEnd.Controllers
             ServiceResponse<bool> response = await _postService.DeletePost(postIdDTO, User.GetIdentifier());
             return response.ReturnStatus();
         }
+        /*
+            Action: Controller Updates the comment of a Post
+            Param: post id, comment to update
+            Return: IAction result with Service response PostDTO
+        */
         [HttpPut]
         public async Task<IActionResult> UpdatePost(UpdatePostDTO getPost){
 
