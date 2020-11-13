@@ -92,9 +92,24 @@ namespace BackEnd.Services.PostServices
             }
             return response; 
         }
-        public Task<ServiceResponse<GetPostDTO>> UpdatePost(UpdatePostDTO updatePost)
+        public async Task<ServiceResponse<GetPostDTO>> UpdatePost(UpdatePostDTO updatePost, int id)
         {
-            throw new System.NotImplementedException();
+            ServiceResponse<GetPostDTO> response = new ServiceResponse<GetPostDTO>(); 
+
+            try{
+
+                Posts post = await _context.Posts.FirstOrDefaultAsync(p => p.Id == updatePost.Id && p.User.Id == id);
+                post.Comment = updatePost.Comment ?? post.Comment; 
+                await _context.SaveChangesAsync(); 
+                response.Data = _mapper.Map<GetPostDTO>(post);
+                
+            }catch(Exception ex){
+
+                response.Message = ex.Message; 
+                response.Success = false; 
+                response.ResultStatusCode = StatusCode.serverError; 
+            }
+            return response; 
         }
     }
 }

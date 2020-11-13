@@ -59,5 +59,11 @@ namespace BackEnd.Controllers
             ServiceResponse<bool> response = await _postService.DeletePost(postIdDTO, User.GetIdentifier());
             return response.ReturnStatus();
         }
+        [HttpPut]
+        public async Task<IActionResult> UpdatePost(UpdatePostDTO getPost){
+
+            ServiceResponse<GetPostDTO> response = await _postService.UpdatePost(getPost, User.GetIdentifier()); 
+            return response.ReturnStatus();
+        }
     }
 }

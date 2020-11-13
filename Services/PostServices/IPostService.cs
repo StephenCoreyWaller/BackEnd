@@ -11,7 +11,7 @@ namespace BackEnd.Services.PostServices
     {
         Task<ServiceResponse<GetPostDTO>> CreatePost(CreatePostDTO create, int user);
         Task<ServiceResponse<List<GetPostDTO>>> GetPosts(int threadId);
-        Task<ServiceResponse<GetPostDTO>> UpdatePost(UpdatePostDTO updatePost);
+        Task<ServiceResponse<GetPostDTO>> UpdatePost(UpdatePostDTO updatePost, int userId);
         Task<ServiceResponse<bool>> DeletePost(GetPostIdDTO postId, int userId);
     }
 }
