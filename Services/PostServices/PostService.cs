@@ -1,3 +1,4 @@
+using System.Runtime.ConstrainedExecution;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -47,16 +48,50 @@ namespace BackEnd.Services.PostServices
             }
             return response; 
         }
-        public Task<ServiceResponse<bool>> DeletePost(GetPostIdDTO postId)
+        /*
+            Action: Gets all post in a thread
+            Param: Int of the thread Id 
+            Return: List of post DTOs 
+        */
+        public async Task<ServiceResponse<List<GetPostDTO>>> GetPosts(int threadId)
         {
-            throw new System.NotImplementedException();
-        }
+            ServiceResponse<List<GetPostDTO>> response = new ServiceResponse<List<GetPostDTO>>(); 
 
-        public Task<ServiceResponse<List<GetPostDTO>>> GetPosts(int threadId)
+            response.Data = await _context.Posts
+                .Include(p => p.User).Where(p => p.Thread.Id == threadId)
+                .Select(p => _mapper.Map<GetPostDTO>(p)).ToListAsync();
+
+            if(response.Data == null){
+
+                response.Success = false; 
+                response.Message = "No post for the requested thread."; 
+                response.ResultStatusCode = StatusCode.NotFound; 
+            }
+            return response; 
+        }
+        /*
+            Action: Controller to delete the post 
+            Param: GetPostIdDTO - id of the post - claim will give user auth
+            Return: IActionResult with bool data 
+        */
+        public async Task<ServiceResponse<bool>> DeletePost(GetPostIdDTO postId, int userId)
         {
-            throw new System.NotImplementedException();
-        }
+            ServiceResponse<bool> response = new ServiceResponse<bool>(); 
 
+            try{
+
+                _context.Posts.Remove(await _context.Posts.FirstOrDefaultAsync(p => p.Id == postId.Id && p.User.Id == userId));
+                await _context.SaveChangesAsync();
+                response.Data = true; 
+
+            }catch(Exception ex){
+
+                response.Data = false; 
+                response.Success = false; 
+                response.Message = ex.Message; 
+            }
+            return response; 
+        }
         public Task<ServiceResponse<GetPostDTO>> UpdatePost(UpdatePostDTO updatePost)
         {
             throw new System.NotImplementedException();

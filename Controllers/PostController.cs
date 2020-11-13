@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -32,6 +33,30 @@ namespace BackEnd.Controllers
         public async Task<IActionResult> CreatePost(CreatePostDTO create)
         {
             ServiceResponse<GetPostDTO> response = await _postService.CreatePost(create, User.GetIdentifier());
+            return response.ReturnStatus();
+        }
+        /*
+            Action: Gets all post in a thread 
+            Param: Int post ID 
+            Returns: IactionResult with the list of post DTOs 
+        */
+        [AllowAnonymous]
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetPosts(int id){
+
+            System.Console.WriteLine(id);
+            ServiceResponse<List<GetPostDTO>> response = await _postService.GetPosts(id);
+            return response.ReturnStatus();
+        }
+        /*
+            Action: Controller to delete the post 
+            Param: GetPostIdDTO - id of the post - claim will give user auth
+            Return: IActionResult with bool data 
+        */
+        [HttpDelete]
+        public async Task<IActionResult> DeletePost(GetPostIdDTO postIdDTO){
+
+            ServiceResponse<bool> response = await _postService.DeletePost(postIdDTO, User.GetIdentifier());
             return response.ReturnStatus();
         }
     }
