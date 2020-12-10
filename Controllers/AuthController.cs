@@ -24,7 +24,7 @@ namespace BackEnd.Controllers
             _repo = repo;
         }
         [HttpPost("register")]
-        public async Task<IActionResult> RegisterUser(RegisterDTO user){
+        public async Task<IActionResult> RegisterUser(AddUserDTO user){
 
             var response = await _repo.RegisterUser(_mapper.Map<User>(user), user.Password);
  
