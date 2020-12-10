@@ -15,6 +15,7 @@ namespace BackEnd.Controllers
     [Route("[controller]")]
     public class AuthController : ControllerBase
     {
+        
         private readonly IAuthRepository _repo;
         private readonly IMapper _mapper;
         public AuthController(IAuthRepository repo, IMapper mapper)
