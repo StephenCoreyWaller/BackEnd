@@ -1,3 +1,4 @@
+using System;
 /*
     Action: Controller for authorization for registraion and login for users. This
     controller uses the Authorizaion services file located in the data directory. 
@@ -8,6 +9,7 @@ using BackEnd.Data;
 using BackEnd.DTOs.UserDTOs;
 using BackEnd.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http; 
 
 namespace BackEnd.Controllers
 {
@@ -33,7 +35,11 @@ namespace BackEnd.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> LoginUser(LoginUserDTO user){
 
+            string key = "TestKey"; 
             var response = await _repo.LoginUser(user); 
+            CookieOptions cookieOptions = new CookieOptions(); 
+            cookieOptions.Expires = DateTime.Now.AddHours(3); 
+            Response.Cookies.Append(key, response.Data, cookieOptions); 
 
             return response.ReturnStatus();
         }
