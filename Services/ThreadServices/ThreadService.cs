@@ -45,7 +45,7 @@ namespace BackEnd.Services.ThreadServices
                     User = await _context.Users.FirstOrDefaultAsync(u => u.Id == id) 
                 };
                 response.Data = _mapper.Map<GetThreadDTO>((await _context.Threads.AddAsync(thread)).Entity);
-                response.Data.UserName = (await _context.Users.FirstOrDefaultAsync(u => u.Id == id)).UserName;  
+                response.Data.User = (await _context.Users.FirstOrDefaultAsync(u => u.Id == id)).UserName;  
                 await _context.SaveChangesAsync();
                 
             }catch (Exception ex){
@@ -61,10 +61,10 @@ namespace BackEnd.Services.ThreadServices
             Param: string of the category name 
             Return: List of threads with the same categroy
         */
-        public async Task<ServiceResponse<List<GetThreadDTO>>> GetAllTheThreads(string category){
+        public async Task<ServiceResponse<List<GetThreadDTO>>> GetAllTheThreads(){
 
             ServiceResponse<List<GetThreadDTO>> response = new ServiceResponse<List<GetThreadDTO>>(); 
-            List<GetThreadDTO> threads = _mapper.Map<List<GetThreadDTO>>(await _context.Threads.Where(t => t.Category == category).ToListAsync());
+            List<GetThreadDTO> threads = _mapper.Map<List<GetThreadDTO>>(await _context.Threads.Include(p => p.User).ToListAsync());
             response.Data = threads; 
 
             if(threads.Count == 0){

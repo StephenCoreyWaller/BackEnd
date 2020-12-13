@@ -43,10 +43,10 @@ namespace BackEnd.Controllers
             development note: create a category entity to seperate threads 
         */
         [AllowAnonymous]
-        [HttpGet("{category}")]
-        public async Task<IActionResult> GetAllThreads(string category){ 
+        [HttpGet()]
+        public async Task<IActionResult> GetAllThreads(){ 
         
-            ServiceResponse<List<GetThreadDTO>> response = await _threadService.GetAllTheThreads(category); 
+            ServiceResponse<List<GetThreadDTO>> response = await _threadService.GetAllTheThreads(); 
             return response.ReturnStatus();
         }
         /*
@@ -67,7 +67,7 @@ namespace BackEnd.Controllers
             Param: None - claims will determine the threads returned 
             Return: List of users threads 
         */
-        [HttpGet]
+        [HttpGet("usersthreads")]
         public async Task<IActionResult> GetUserThreads(){
 
             ServiceResponse<List<GetThreadDTO>> response = await _threadService.GetThreadsOfUser(User.GetIdentifier()); 

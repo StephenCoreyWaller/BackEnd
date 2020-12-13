@@ -29,6 +29,13 @@ namespace BackEnd
         {
             services.AddDbContext<DataContext>(opt => 
                 opt.UseSqlServer(Configuration.GetConnectionString("DbConnectionString"))); 
+            services.AddCors(opt => {
+                
+                opt.AddPolicy("CORSPolicy", policy =>{
+
+                    policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000");
+                });
+            });    
             services.AddScoped<IUserService, UserService>(); 
             services.AddScoped<IThreadService, ThreadService>();
             services.AddScoped<IPostService, PostService>();
@@ -60,6 +67,8 @@ namespace BackEnd
             app.UseAuthentication();
 
             app.UseAuthorization();
+
+            app.UseCors("CORSPolicy");
 
             app.UseEndpoints(endpoints =>
             {

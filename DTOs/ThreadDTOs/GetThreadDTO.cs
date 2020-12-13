@@ -11,7 +11,7 @@ namespace BackEnd.DTOs.ThreadDTOs
         public string Title { get; set; }
         public string Category { get; set; }
         public DateTime DateAndTimeCreated { get; set; }
-        public string UserName { get; set; }
+        public string User { get; set; }
 
     }
 }

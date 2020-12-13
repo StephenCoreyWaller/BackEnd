@@ -15,7 +15,7 @@ namespace BackEnd
             CreateMap<AddUserDTO, User>(); 
             CreateMap<RegisterDTO, User>(); 
             CreateMap<Thread, CreateThreadDTO>(); 
-            CreateMap<Thread, GetThreadDTO>();
+            CreateMap<Thread, GetThreadDTO>().ForMember(GetThread => GetThread.User, User => User.MapFrom(u => u.User.UserName)); 
             CreateMap<Posts, GetPostDTO>().ForMember(PostDto => 
                 PostDto.User, Post => 
                     Post.MapFrom(p => p.User.UserName)
